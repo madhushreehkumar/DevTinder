@@ -1,23 +1,37 @@
-const express=require('express');
+const express = require("express");
+const connectdb = require("./config/database");
+const app = express();
+const cookieparaser = require("cookie-parser");
 
-const app=express();
+app.use(express.json());
+app.use(cookieparaser());
 
+const authRouter = require("./routes/authroutes");
+const profileRouter = require("./routes/profile");
+const requestRouter = require("./routes/request");
 
-
-app.use("/test",(req,res)=>{
-    res.send('Welcome Home!');
-});
-
-app.use("/namaste", (req, res) => {
- res.send("namaste!!");
-});
-
-app.use('/',(req,res)=>{
-        res.send("Hello server")
-});
+app.use("/",authRouter);
+app.use("/",profileRouter);
+app.use("/",requestRouter);
 
 
-app.listen(3000,()=>{
-    console.log("Server started to listen");
-});
+//import all routes
 
+//signup
+//login
+//to get profile data
+//to get user data by email
+//to get all users
+//delete by ID
+//to update the data
+
+connectdb()
+  .then(() => {
+    console.log("DB connected successfully");
+    app.listen("7777", () => {
+      console.log("App started to listen");
+    });
+  })
+  .catch((err) => {
+    console.error("Error occured", err);
+  });
